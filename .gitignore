@@ -1,0 +1,25 @@
+node_modules/
+
+# Database
+aquilles.db
+aquilles.db-shm
+aquilles.db-wal
+
+# Scraped datasets (contain personal info: phones, addresses)
+dataset_*.json
+
+# Generated output
+sites/
+videos/
+public/*.png
+
+# Temp files
+.tmp-video/
+
+# Environment / secrets
+.env
+.env.*
+*.key
+
+# Claude Code
+.claude/

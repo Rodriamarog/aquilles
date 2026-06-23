@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 1280px;
+      height: 720px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #0f1923 0%, #1a2a3a 50%, #0f1923 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 60px;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 50% 50% at 30% 50%, rgba(0,180,160,0.08), transparent),
+        radial-gradient(ellipse 40% 40% at 70% 40%, rgba(0,120,200,0.06), transparent);
+    }
+
+    .laptop {
+      position: relative;
+      z-index: 1;
+    }
+
+    .laptop-screen {
+      width: 580px;
+      height: 363px;
+      background: #000;
+      border-radius: 12px 12px 0 0;
+      border: 2px solid #2a3a4a;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .laptop-screen iframe {
+      width: 1160px;
+      height: 726px;
+      border: 0;
+      transform: scale(0.5);
+      transform-origin: top left;
+    }
+
+    .laptop-base {
+      width: 660px;
+      height: 18px;
+      background: linear-gradient(180deg, #2a3a4a 0%, #1a2a3a 100%);
+      border-radius: 0 0 8px 8px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .laptop-base::before {
+      content: '';
+      position: absolute;
+      top: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 6px;
+      background: #1a2a3a;
+      border-radius: 0 0 4px 4px;
+    }
+
+    .laptop-hinge {
+      width: 620px;
+      height: 4px;
+      background: linear-gradient(180deg, #3a4a5a, #2a3a4a);
+      margin: 0 auto;
+      border-radius: 0 0 2px 2px;
+    }
+
+    .phone {
+      position: relative;
+      z-index: 1;
+    }
+
+    .phone-frame {
+      width: 220px;
+      height: 450px;
+      background: #1a1a1a;
+      border-radius: 28px;
+      border: 3px solid #2a3a4a;
+      padding: 12px 8px;
+      position: relative;
+    }
+
+    .phone-frame::before {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 6px;
+      background: #2a3a4a;
+      border-radius: 3px;
+      z-index: 2;
+    }
+
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .phone-screen iframe {
+      width: 612px;
+      height: 1278px;
+      border: 0;
+      transform: scale(0.333);
+      transform-origin: top left;
+    }
+
+    .watermark {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255,255,255,0.25);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <div class="laptop">
+    <div class="laptop-screen">
+      <iframe id="laptop-iframe" src="{{SITE_PATH}}" scrolling="no"></iframe>
+    </div>
+    <div class="laptop-hinge"></div>
+    <div class="laptop-base"></div>
+  </div>
+
+  <div class="phone">
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <iframe id="phone-iframe" src="{{SITE_PATH}}" scrolling="no"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <div class="watermark">{{BUSINESS_NAME}}</div>
+
+  <script>
+    const SCROLL_DURATION = 12000;
+    const PAUSE_START = 2000;
+    const PAUSE_END = 2000;
+
+    function easeInOutCubic(t) {
+      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
+
+    window.addEventListener('load', () => {
+      const laptopIframe = document.getElementById('laptop-iframe');
+      const phoneIframe = document.getElementById('phone-iframe');
+
+      function waitForIframes() {
+        return new Promise(resolve => {
+          let loaded = 0;
+          function check() { if (++loaded === 2) resolve(); }
+          laptopIframe.addEventListener('load', check);
+          phoneIframe.addEventListener('load', check);
+        });
+      }
+
+      waitForIframes().then(() => {
+        const laptopDoc = laptopIframe.contentDocument;
+        const phoneDoc = phoneIframe.contentDocument;
+
+        const laptopMax = laptopDoc.documentElement.scrollHeight - laptopIframe.clientHeight;
+        const phoneMax = phoneDoc.documentElement.scrollHeight - phoneIframe.clientHeight;
+
+        setTimeout(() => {
+          const start = performance.now();
+
+          function animate(now) {
+            const elapsed = now - start;
+            const t = Math.min(elapsed / SCROLL_DURATION, 1);
+            const eased = easeInOutCubic(t);
+
+            laptopDoc.documentElement.scrollTop = eased * laptopMax;
+            phoneDoc.documentElement.scrollTop = eased * phoneMax;
+
+            if (t < 1) requestAnimationFrame(animate);
+          }
+
+          requestAnimationFrame(animate);
+        }, PAUSE_START);
+      });
+    });
+  </script>
+</body>
+</html>

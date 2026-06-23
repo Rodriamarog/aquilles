@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{BUSINESS_NAME}} — Dentista en {{CITY}}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --color-primary: oklch(0.45 0.12 175);
+  --color-primary-light: oklch(0.55 0.10 175);
+  --color-primary-dark: oklch(0.35 0.12 175);
+  --color-primary-bg: oklch(0.97 0.02 175);
+  --color-accent: oklch(0.75 0.15 85);
+  --color-accent-dark: oklch(0.65 0.15 85);
+  --color-text: oklch(0.20 0.02 260);
+  --color-text-muted: oklch(0.50 0.01 260);
+  --color-text-light: oklch(0.65 0.01 260);
+  --color-bg: oklch(0.995 0.002 260);
+  --color-bg-alt: oklch(0.97 0.005 260);
+  --color-surface: oklch(1.0 0 0);
+  --color-border: oklch(0.92 0.005 260);
+  --color-whatsapp: oklch(0.60 0.16 155);
+  --color-whatsapp-hover: oklch(0.55 0.16 155);
+  --color-star: oklch(0.78 0.17 85);
+  --font: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --shadow-sm: 0 1px 3px oklch(0.20 0.02 260 / 0.06);
+  --shadow-md: 0 4px 20px oklch(0.20 0.02 260 / 0.08);
+  --shadow-lg: 0 8px 40px oklch(0.20 0.02 260 / 0.10);
+  --shadow-xl: 0 16px 60px oklch(0.20 0.02 260 / 0.12);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body { font-family: var(--font); color: var(--color-text); background: var(--color-bg); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+.hero { position: relative; min-height: 100vh; min-height: 100dvh; display: flex; align-items: center; justify-content: center; background: linear-gradient(165deg, oklch(0.35 0.12 175) 0%, oklch(0.25 0.10 200) 100%); overflow: hidden; padding: 2rem; }
+.hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 20% 80%, oklch(0.45 0.15 175 / 0.4), transparent), radial-gradient(ellipse 60% 50% at 80% 20%, oklch(0.50 0.10 200 / 0.3), transparent); z-index: 1; }
+.hero::after { content: ''; position: absolute; inset: 0; background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); z-index: 1; }
+.hero-content { position: relative; z-index: 2; text-align: center; max-width: 800px; }
+.hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 20px; background: oklch(1.0 0 0 / 0.12); backdrop-filter: blur(10px); border: 1px solid oklch(1.0 0 0 / 0.15); border-radius: 100px; color: oklch(0.95 0.02 175); font-size: 0.875rem; font-weight: 600; margin-bottom: 1.5rem; letter-spacing: 0.02em; }
+.hero-badge svg { flex-shrink: 0; }
+.hero h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 800; color: white; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 1.25rem; text-wrap: balance; }
+.hero p { font-size: clamp(1.05rem, 2vw, 1.3rem); color: oklch(0.85 0.03 175); max-width: 550px; margin: 0 auto 2.5rem; line-height: 1.7; text-wrap: pretty; }
+.hero-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; gap: 10px; padding: 16px 32px; border-radius: var(--radius-md); font-family: var(--font); font-size: 1rem; font-weight: 700; text-decoration: none; border: none; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); letter-spacing: 0.01em; }
+.btn-primary { background: white; color: var(--color-primary-dark); box-shadow: 0 4px 20px oklch(0.20 0 0 / 0.15); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px oklch(0.20 0 0 / 0.2); }
+.btn-outline { background: oklch(1.0 0 0 / 0.08); color: white; border: 1.5px solid oklch(1.0 0 0 / 0.25); }
+.btn-outline:hover { background: oklch(1.0 0 0 / 0.15); border-color: oklch(1.0 0 0 / 0.4); }
+.hero-stats { display: flex; gap: 3rem; justify-content: center; margin-top: 3.5rem; padding-top: 2.5rem; border-top: 1px solid oklch(1.0 0 0 / 0.12); }
+.hero-stat { text-align: center; }
+.hero-stat-value { font-size: 1.75rem; font-weight: 800; color: white; line-height: 1.2; }
+.hero-stat-label { font-size: 0.8rem; color: oklch(0.75 0.03 175); font-weight: 500; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.08em; }
+section { padding: 6rem 2rem; }
+.container { max-width: 1100px; margin: 0 auto; }
+.section-label { display: inline-flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-primary); margin-bottom: 1rem; }
+.section-title { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; color: var(--color-text); margin-bottom: 1rem; text-wrap: balance; }
+.section-subtitle { font-size: 1.1rem; color: var(--color-text-muted); max-width: 560px; line-height: 1.7; text-wrap: pretty; }
+.services { background: var(--color-bg); }
+.services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-top: 3rem; }
+.service-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 2rem; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+.service-card:hover { border-color: oklch(0.80 0.06 175); box-shadow: var(--shadow-md); transform: translateY(-3px); }
+.service-icon { width: 52px; height: 52px; border-radius: var(--radius-md); background: var(--color-primary-bg); display: grid; place-items: center; margin-bottom: 1.25rem; color: var(--color-primary); }
+.service-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: -0.01em; }
+.service-card p { font-size: 0.92rem; color: var(--color-text-muted); line-height: 1.65; }
+.reviews { background: var(--color-bg-alt); }
+.reviews-header { display: flex; align-items: end; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+.rating-large { display: flex; align-items: center; gap: 1rem; margin-top: 1rem; }
+.rating-number { font-size: 3.5rem; font-weight: 800; line-height: 1; letter-spacing: -0.03em; color: var(--color-text); }
+.rating-details { display: flex; flex-direction: column; gap: 4px; }
+.stars { display: flex; gap: 3px; color: var(--color-star); }
+.rating-count { font-size: 0.9rem; color: var(--color-text-muted); font-weight: 500; }
+.google-badge { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: 0.85rem; font-weight: 600; color: var(--color-text-muted); text-decoration: none; }
+.reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; margin-top: 2.5rem; }
+.review-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 1.75rem; }
+.review-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; }
+.review-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--color-primary-bg); display: grid; place-items: center; font-size: 1.1rem; font-weight: 700; color: var(--color-primary); flex-shrink: 0; }
+.review-name { font-weight: 700; font-size: 0.95rem; }
+.review-date { font-size: 0.8rem; color: var(--color-text-light); }
+.review-stars { display: flex; gap: 2px; color: var(--color-star); margin-bottom: 0.75rem; }
+.review-card p { font-size: 0.92rem; color: var(--color-text-muted); line-height: 1.7; }
+.location { background: var(--color-bg); }
+.location-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 3rem; }
+.location-map { border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--color-border); aspect-ratio: 4/3; background: var(--color-bg-alt); display: grid; place-items: center; color: var(--color-text-light); font-size: 0.9rem; }
+.location-map iframe { width: 100%; height: 100%; border: 0; }
+.location-info { display: flex; flex-direction: column; gap: 1.5rem; justify-content: center; }
+.location-item { display: flex; gap: 1rem; align-items: start; }
+.location-icon { width: 44px; height: 44px; border-radius: var(--radius-sm); background: var(--color-primary-bg); display: grid; place-items: center; color: var(--color-primary); flex-shrink: 0; }
+.location-item h4 { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-text-light); margin-bottom: 4px; }
+.location-item p { font-size: 1rem; color: var(--color-text); font-weight: 500; }
+.cta { background: linear-gradient(165deg, oklch(0.35 0.12 175) 0%, oklch(0.28 0.10 200) 100%); text-align: center; position: relative; overflow: hidden; }
+.cta::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 60% at 50% 100%, oklch(0.45 0.15 175 / 0.3), transparent); }
+.cta .container { position: relative; z-index: 1; }
+.cta .section-title { color: white; }
+.cta .section-subtitle { color: oklch(0.82 0.03 175); margin: 0 auto 2.5rem; }
+.btn-whatsapp { background: var(--color-whatsapp); color: white; padding: 18px 40px; font-size: 1.1rem; border-radius: var(--radius-md); box-shadow: 0 4px 24px oklch(0.60 0.16 155 / 0.3); }
+.btn-whatsapp:hover { background: var(--color-whatsapp-hover); transform: translateY(-2px); box-shadow: 0 8px 32px oklch(0.60 0.16 155 / 0.4); }
+.footer { background: oklch(0.15 0.02 260); color: oklch(0.65 0.01 260); padding: 2.5rem 2rem; text-align: center; font-size: 0.85rem; }
+.footer a { color: oklch(0.70 0.06 175); text-decoration: none; }
+.whatsapp-float { position: fixed; bottom: 28px; right: 28px; z-index: 1000; width: 64px; height: 64px; border-radius: 50%; background: var(--color-whatsapp); display: grid; place-items: center; color: white; text-decoration: none; box-shadow: 0 4px 24px oklch(0.60 0.16 155 / 0.35); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+.whatsapp-float:hover { transform: scale(1.1); box-shadow: 0 6px 32px oklch(0.60 0.16 155 / 0.45); }
+.whatsapp-float svg { width: 32px; height: 32px; }
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), transform 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+.lang-toggle { position: fixed; top: 20px; right: 20px; z-index: 1000; display: flex; background: oklch(0.15 0.02 260 / 0.7); backdrop-filter: blur(12px); border-radius: 100px; padding: 4px; border: 1px solid oklch(1.0 0 0 / 0.15); }
+.lang-toggle button { padding: 6px 14px; border: none; border-radius: 100px; font-family: var(--font); font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s; background: transparent; color: oklch(0.75 0 0); }
+.lang-toggle button.active { background: white; color: oklch(0.20 0.02 260); }
+@media (max-width: 768px) {
+  section { padding: 4rem 1.25rem; }
+  .hero { padding: 1.25rem; }
+  .hero-stats { gap: 1.5rem; }
+  .hero-stat-value { font-size: 1.35rem; }
+  .btn-whatsapp { padding: 14px 24px; font-size: 0.95rem; }
+  .location-grid { grid-template-columns: 1fr; }
+  .reviews-header { flex-direction: column; align-items: start; }
+  .whatsapp-float { width: 56px; height: 56px; bottom: 20px; right: 20px; }
+  .whatsapp-float svg { width: 28px; height: 28px; }
+}
+  </style>
+</head>
+<body>
+
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+        <span data-i18n="hero_badge">{{RATING}} estrellas en Google</span>
+      </div>
+      <h1>{{BUSINESS_NAME}}</h1>
+      <p data-i18n="hero_subtitle">Tu sonrisa merece la mejor atenci&oacute;n. Cuidado dental profesional con tecnolog&iacute;a de vanguardia en {{CITY}}.</p>
+      <div class="hero-buttons">
+        <a href="https://wa.me/{{PHONE_CLEAN}}" class="btn btn-primary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"></path></svg>
+          <span data-i18n="btn_whatsapp">Agendar por WhatsApp</span>
+        </a>
+        <a href="tel:{{PHONE_CLEAN}}" class="btn btn-outline">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"></path></svg>
+          <span data-i18n="btn_call">Llamar ahora</span>
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-value">{{REVIEWS_COUNT}}+</div>
+          <div class="hero-stat-label" data-i18n="stat_reviews">Rese&ntilde;as</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">{{RATING}}</div>
+          <div class="hero-stat-label" data-i18n="stat_rating">Calificaci&oacute;n</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">{{YEARS}}+</div>
+          <div class="hero-stat-label" data-i18n="stat_years">A&ntilde;os</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="services">
+    <div class="container">
+      <div class="reveal">
+        <span class="section-label" data-i18n="services_label">Servicios</span>
+        <h2 class="section-title" data-i18n="services_title">Todo para tu salud dental</h2>
+        <p class="section-subtitle" data-i18n="services_subtitle">Ofrecemos una amplia gama de tratamientos dentales con los m&aacute;s altos est&aacute;ndares de calidad.</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card reveal reveal-delay-1">
+          <div class="service-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c-4.97 0-9-2.24-9-5v-4c0-2.76 4.03-5 9-5s9 2.24 9 5v4c0 2.76-4.03 5-9 5z"></path><path d="M12 8V2"></path><path d="M8 4l4-2 4 2"></path></svg>
+          </div>
+          <h3 data-i18n="svc_cleaning">Limpieza Dental</h3>
+          <p data-i18n="svc_cleaning_desc">Limpieza profesional para mantener tus dientes y enc&iacute;as en perfecto estado.</p>
+        </div>
+        <div class="service-card reveal reveal-delay-2">
+          <div class="service-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+          </div>
+          <h3 data-i18n="svc_orthodontics">Ortodoncia</h3>
+          <p data-i18n="svc_orthodontics_desc">Tratamientos de alineaci&oacute;n dental con brackets tradicionales e invisibles.</p>
+        </div>
+        <div class="service-card reveal reveal-delay-3">
+          <div class="service-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"></path><path d="M5.5 6.5L12 3l6.5 3.5"></path><path d="M3 12h18"></path><circle cx="12" cy="12" r="9"></circle></svg>
+          </div>
+          <h3 data-i18n="svc_implants">Implantes Dentales</h3>
+          <p data-i18n="svc_implants_desc">Recupera piezas perdidas con implantes de titanio de &uacute;ltima generaci&oacute;n.</p>
+        </div>
+        <div class="service-card reveal reveal-delay-4">
+          <div class="service-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+          </div>
+          <h3 data-i18n="svc_whitening">Blanqueamiento</h3>
+          <p data-i18n="svc_whitening_desc">Sonrisa m&aacute;s brillante con nuestro tratamiento de blanqueamiento profesional.</p>
+        </div>
+        <div class="service-card reveal reveal-delay-1">
+          <div class="service-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z"></path><path d="M12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z"></path></svg>
+          </div>
+          <h3 data-i18n="svc_endodontics">Endodoncia</h3>
+          <p data-i18n="svc_endodontics_desc">Tratamientos de conducto para salvar piezas dentales da&ntilde;adas.</p>
+        </div>
+        <div class="service-card reveal reveal-delay-2">
+          <div class="service-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path></svg>
+          </div>
+          <h3 data-i18n="svc_pediatric">Odontopediatr&iacute;a</h3>
+          <p data-i18n="svc_pediatric_desc">Atenci&oacute;n dental especializada para los m&aacute;s peque&ntilde;os del hogar.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="reviews">
+    <div class="container">
+      <div class="reviews-header reveal">
+        <div>
+          <span class="section-label" data-i18n="reviews_label">Rese&ntilde;as</span>
+          <h2 class="section-title" data-i18n="reviews_title">Lo que dicen nuestros pacientes</h2>
+          <div class="rating-large">
+            <span class="rating-number">{{RATING}}</span>
+            <div class="rating-details">
+              <div class="stars">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+              </div>
+              <span class="rating-count" data-i18n="reviews_count">{{REVIEWS_COUNT}} rese&ntilde;as en Google</span>
+            </div>
+          </div>
+        </div>
+        <a href="{{GOOGLE_MAPS_URL}}" class="google-badge" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"></path><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"></path><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path></svg>
+          <span data-i18n="view_google">Ver en Google</span>
+        </a>
+      </div>
+      <div class="reviews-grid">
+        <div class="review-card reveal reveal-delay-1">
+          <div class="review-header">
+            <div class="review-avatar">M</div>
+            <div>
+              <div class="review-name">Mar&iacute;a G.</div>
+              <div class="review-date" data-i18n="review1_date">Hace 2 semanas</div>
+            </div>
+          </div>
+          <div class="review-stars">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+          </div>
+          <p data-i18n="review1_text">"Excelente atenci&oacute;n desde que llegas. El doctor es muy profesional y te explica todo el procedimiento. Totalmente recomendado."</p>
+        </div>
+        <div class="review-card reveal reveal-delay-2">
+          <div class="review-header">
+            <div class="review-avatar">J</div>
+            <div>
+              <div class="review-name">Jorge R.</div>
+              <div class="review-date" data-i18n="review2_date">Hace 1 mes</div>
+            </div>
+          </div>
+          <div class="review-stars">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+          </div>
+          <p data-i18n="review2_text">"Me hicieron un implante y qued&oacute; perfecto. Los precios son muy accesibles comparados con otros dentistas. Muy contento con el resultado."</p>
+        </div>
+        <div class="review-card reveal reveal-delay-3">
+          <div class="review-header">
+            <div class="review-avatar">A</div>
+            <div>
+              <div class="review-name">Ana L.</div>
+              <div class="review-date" data-i18n="review3_date">Hace 3 semanas</div>
+            </div>
+          </div>
+          <div class="review-stars">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+          </div>
+          <p data-i18n="review3_text">"Llev&eacute; a mis hijos y los trataron con mucha paciencia. El lugar est&aacute; muy limpio y moderno. Sin duda regresaremos."</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="location">
+    <div class="container">
+      <div class="reveal">
+        <span class="section-label" data-i18n="location_label">Ubicaci&oacute;n</span>
+        <h2 class="section-title" data-i18n="location_title">Encu&eacute;ntranos f&aacute;cilmente</h2>
+        <p class="section-subtitle" data-i18n="location_subtitle">Estamos ubicados en una zona accesible de {{CITY}} con amplio estacionamiento.</p>
+      </div>
+      <div class="location-grid">
+        <div class="location-map reveal reveal-delay-1">
+          <iframe src="https://maps.google.com/maps?q={{ADDRESS_ENCODED}}&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+        </div>
+        <div class="location-info">
+          <div class="location-item reveal reveal-delay-1">
+            <div class="location-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            </div>
+            <div>
+              <h4 data-i18n="loc_address">Direcci&oacute;n</h4>
+              <p>{{ADDRESS}}</p>
+            </div>
+          </div>
+          <div class="location-item reveal reveal-delay-2">
+            <div class="location-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"></path></svg>
+            </div>
+            <div>
+              <h4 data-i18n="loc_phone">Tel&eacute;fono</h4>
+              <p>{{PHONE}}</p>
+            </div>
+          </div>
+          <div class="location-item reveal reveal-delay-3">
+            <div class="location-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </div>
+            <div>
+              <h4 data-i18n="loc_hours">Horario</h4>
+              <p data-i18n="loc_hours_weekday">Lun &mdash; Vie: 9:00 &mdash; 19:00</p>
+              <p data-i18n="loc_hours_weekend">S&aacute;b: 9:00 &mdash; 14:00</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="container reveal">
+      <h2 class="section-title" data-i18n="cta_title">&iquest;Listo para tu mejor sonrisa?</h2>
+      <p class="section-subtitle" data-i18n="cta_subtitle">Agenda tu cita hoy y da el primer paso hacia una sonrisa saludable.</p>
+      <a href="https://wa.me/{{PHONE_CLEAN}}" class="btn btn-whatsapp">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"></path></svg>
+        <span data-i18n="cta_btn">Agendar cita por WhatsApp</span>
+      </a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>&copy; 2026 {{BUSINESS_NAME}} &mdash; {{CITY}}</p>
+  </footer>
+
+  <div class="lang-toggle">
+    <button data-lang="es" class="active">ES</button>
+    <button data-lang="en">EN</button>
+  </div>
+
+  <a href="https://wa.me/{{PHONE_CLEAN}}" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"></path></svg>
+  </a>
+
+  <script>
+const i18n = {
+  en: {
+    hero_badge: "{{RATING}} stars on Google",
+    hero_subtitle: "Your smile deserves the best care. Professional dental treatment with cutting-edge technology in {{CITY}}.",
+    btn_whatsapp: "Book via WhatsApp",
+    btn_call: "Call now",
+    stat_reviews: "Reviews",
+    stat_rating: "Rating",
+    stat_years: "Years",
+    services_label: "Services",
+    services_title: "Everything for your dental health",
+    services_subtitle: "We offer a wide range of dental treatments with the highest quality standards.",
+    svc_cleaning: "Dental Cleaning",
+    svc_cleaning_desc: "Professional cleaning to keep your teeth and gums in perfect condition.",
+    svc_orthodontics: "Orthodontics",
+    svc_orthodontics_desc: "Dental alignment treatments with traditional and invisible braces.",
+    svc_implants: "Dental Implants",
+    svc_implants_desc: "Restore missing teeth with state-of-the-art titanium implants.",
+    svc_whitening: "Whitening",
+    svc_whitening_desc: "A brighter smile with our professional whitening treatment.",
+    svc_endodontics: "Endodontics",
+    svc_endodontics_desc: "Root canal treatments to save damaged teeth.",
+    svc_pediatric: "Pediatric Dentistry",
+    svc_pediatric_desc: "Specialized dental care for the little ones at home.",
+    reviews_label: "Reviews",
+    reviews_title: "What our patients say",
+    reviews_count: "{{REVIEWS_COUNT}} reviews on Google",
+    view_google: "View on Google",
+    review1_date: "2 weeks ago",
+    review1_text: '"Excellent care from the moment you arrive. The doctor is very professional and explains the entire procedure. Totally recommended."',
+    review2_date: "1 month ago",
+    review2_text: '"They did an implant and it came out perfect. The prices are very affordable compared to other dentists. Very happy with the result."',
+    review3_date: "3 weeks ago",
+    review3_text: '"I took my kids and they were treated with great patience. The place is very clean and modern. We will definitely be back."',
+    location_label: "Location",
+    location_title: "Find us easily",
+    location_subtitle: "We are located in an accessible area of {{CITY}} with ample parking.",
+    loc_address: "Address",
+    loc_phone: "Phone",
+    loc_hours: "Hours",
+    loc_hours_weekday: "Mon — Fri: 9:00 AM — 7:00 PM",
+    loc_hours_weekend: "Sat: 9:00 AM — 2:00 PM",
+    cta_title: "Ready for your best smile?",
+    cta_subtitle: "Book your appointment today and take the first step towards a healthy smile.",
+    cta_btn: "Book appointment via WhatsApp"
+  }
+};
+
+function setLang(lang) {
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (lang === 'en' && i18n.en[key]) {
+      if (!el.dataset.original) el.dataset.original = el.innerHTML;
+      el.innerHTML = i18n.en[key];
+    } else if (el.dataset.original) {
+      el.innerHTML = el.dataset.original;
+    }
+  });
+  document.querySelectorAll('.lang-toggle button').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.lang === lang);
+  });
+  localStorage.setItem('lang', lang);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  document.querySelector('.lang-toggle').addEventListener('click', (e) => {
+    if (e.target.dataset.lang) setLang(e.target.dataset.lang);
+  });
+
+  const saved = localStorage.getItem('lang');
+  const detected = saved || (navigator.language.startsWith('en') ? 'en' : 'es');
+  if (detected === 'en') setLang('en');
+});
+  </script>
+</body>
+</html>

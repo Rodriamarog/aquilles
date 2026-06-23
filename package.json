@@ -1,0 +1,22 @@
+{
+  "name": "aquilles",
+  "version": "1.0.0",
+  "description": "Lead outreach system for local businesses",
+  "type": "module",
+  "scripts": {
+    "import-leads": "node scripts/import-leads.js",
+    "generate-sites": "node scripts/generate-sites.js",
+    "bot": "node src/bot.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@remotion/bundler": "^4.0.482",
+    "@remotion/cli": "^4.0.482",
+    "@remotion/renderer": "^4.0.482",
+    "better-sqlite3": "^12.11.1",
+    "playwright": "^1.61.0",
+    "remotion": "^4.0.482"
+  }
+}
