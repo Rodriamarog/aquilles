@@ -177,6 +177,16 @@ client.on('ready', () => {
           console.error(`[send-one] Failed: ${err.message}`);
         }
       });
+    } else if (req.method === 'POST' && req.url === '/pitch-one') {
+      let body = '';
+      req.on('data', c => body += c);
+      req.on('end', async () => {
+        const { phone } = JSON.parse(body);
+        const lead = db.prepare(`SELECT * FROM leads WHERE phone_normalized = ?`).get(phone);
+        if (!lead) { res.writeHead(404).end('Lead not found\n'); return; }
+        res.writeHead(200).end(`Pitching ${lead.title}...\n`);
+        await deliverPitch(client, lead);
+      });
     } else {
       res.writeHead(404).end('Not found\n');
     }
