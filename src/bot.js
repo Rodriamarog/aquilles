@@ -2,6 +2,7 @@ import { createRequire } from 'module';
 import { readFileSync, unlinkSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import http from 'http';
 import db from './db.js';
 
 const require = createRequire(import.meta.url);
@@ -19,7 +20,8 @@ if (!INITIAL_PITCH) throw new Error('INITIAL_PITCH not found in app.conf');
 const OPENER = 'Buen dia';
 const VIDEO_TEASE = 'Los de diseño grafico les prepararon un pequeño video demostrativo';
 const DAILY_LIMIT = 5;
-const SEND_INTERVAL_MS = 24 * 60 * 60 * 1000;
+const BETWEEN_LEADS_MS = 5 * 60 * 1000;
+const TRIGGER_PORT = 3876;
 
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
@@ -58,8 +60,13 @@ async function sendDailyBatch(client) {
     return;
   }
 
-  console.log(`[bot] Sending opener to ${leads.length} leads...`);
-  for (const lead of leads) {
+  console.log(`[bot] Sending opener to ${leads.length} leads (5 min apart)...`);
+  for (let i = 0; i < leads.length; i++) {
+    const lead = leads[i];
+    if (!lead.phone_normalized) {
+      console.error(`  ✗ ${lead.title}: no normalized phone, skipping`);
+      continue;
+    }
     try {
       const numberId = await client.getNumberId(lead.phone_normalized);
       if (!numberId) {
@@ -74,7 +81,12 @@ async function sendDailyBatch(client) {
     } catch (err) {
       console.error(`  ✗ ${lead.title}: ${err.message}`);
     }
+    if (i < leads.length - 1) {
+      console.log(`[bot] Waiting 5 minutes before next lead...`);
+      await sleep(BETWEEN_LEADS_MS);
+    }
   }
+  console.log('[bot] Batch done.');
 }
 
 async function deliverPitch(client, lead) {
@@ -121,10 +133,26 @@ client.on('qr', (qr) => {
   console.log('[bot] Scan the QR code above with WhatsApp');
 });
 
-client.on('ready', async () => {
-  console.log('[bot] Client is ready');
-  await sendDailyBatch(client);
-  setInterval(() => sendDailyBatch(client), SEND_INTERVAL_MS);
+client.on('ready', () => {
+  console.log('[bot] Client is ready — waiting for manual trigger');
+
+  let sending = false;
+  http.createServer(async (req, res) => {
+    if (req.method === 'POST' && req.url === '/send') {
+      if (sending) {
+        res.writeHead(409).end('Batch already in progress\n');
+        return;
+      }
+      res.writeHead(200).end('Batch started\n');
+      sending = true;
+      await sendDailyBatch(client);
+      sending = false;
+    } else {
+      res.writeHead(404).end('Not found\n');
+    }
+  }).listen(TRIGGER_PORT, '127.0.0.1', () => {
+    console.log(`[bot] Trigger server listening on http://127.0.0.1:${TRIGGER_PORT}/send`);
+  });
 });
 
 client.on('message', async (msg) => {
