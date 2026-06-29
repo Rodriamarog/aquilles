@@ -158,6 +158,25 @@ client.on('ready', () => {
       } catch (err) {
         console.error('[test] Failed:', err.message);
       }
+    } else if (req.method === 'POST' && req.url === '/send-one') {
+      let body = '';
+      req.on('data', c => body += c);
+      req.on('end', async () => {
+        const { phone } = JSON.parse(body);
+        const lead = db.prepare(`SELECT * FROM leads WHERE phone_normalized = ?`).get(phone);
+        if (!lead) { res.writeHead(404).end('Lead not found\n'); return; }
+        res.writeHead(200).end(`Sending to ${lead.title}...\n`);
+        try {
+          const numberId = await client.getNumberId(phone);
+          if (!numberId) { console.error(`[send-one] ${lead.title}: not on WhatsApp`); return; }
+          await typeAndSend(numberId._serialized, OPENER);
+          stmtInsertMsg.run(lead.id, 'sent', OPENER);
+          stmtSetContacted.run(lead.id);
+          console.log(`[send-one] → ${lead.title}`);
+        } catch (err) {
+          console.error(`[send-one] Failed: ${err.message}`);
+        }
+      });
     } else {
       res.writeHead(404).end('Not found\n');
     }
