@@ -51,7 +51,7 @@ async function sendDailyBatch(client) {
   const leads = db.prepare(`
     SELECT * FROM leads
     WHERE status = 'pending' AND video_path IS NOT NULL
-      AND has_real_website = 0 AND phone IS NOT NULL
+      AND has_real_website = 0 AND phone_normalized IS NOT NULL
     ORDER BY title ASC LIMIT ?
   `).all(DAILY_LIMIT);
 
