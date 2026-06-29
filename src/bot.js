@@ -187,9 +187,13 @@ client.on('ready', () => {
 
 client.on('message', async (msg) => {
   if (msg.fromMe) return;
+  console.log(`[bot] Incoming message from ${msg.from}: "${msg.body}"`);
 
   const lead = findLeadByChatId(msg.from);
-  if (!lead) return;
+  if (!lead) {
+    console.log(`[bot] No lead found for ${msg.from}`);
+    return;
+  }
 
   stmtInsertMsg.run(lead.id, 'received', msg.body);
   console.log(`[bot] Reply from ${lead.title}: "${msg.body}"`);
