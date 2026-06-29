@@ -51,5 +51,6 @@ db.exec(`
 try { db.exec('ALTER TABLE leads ADD COLUMN video_path TEXT'); } catch {}
 try { db.exec('ALTER TABLE leads ADD COLUMN phone_normalized TEXT'); } catch {}
 try { db.exec('CREATE INDEX IF NOT EXISTS idx_leads_phone_normalized ON leads(phone_normalized)'); } catch {}
+try { db.exec('ALTER TABLE leads ADD COLUMN on_whatsapp INTEGER'); } catch {}
 
 export default db;

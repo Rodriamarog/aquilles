@@ -52,7 +52,8 @@ async function sendDailyBatch(client) {
     SELECT * FROM leads
     WHERE status = 'pending' AND video_path IS NOT NULL
       AND has_real_website = 0 AND phone_normalized IS NOT NULL
-    ORDER BY title ASC LIMIT ?
+      AND (on_whatsapp IS NULL OR on_whatsapp = 1)
+    ORDER BY on_whatsapp DESC, title ASC LIMIT ?
   `).all(DAILY_LIMIT);
 
   if (leads.length === 0) {
