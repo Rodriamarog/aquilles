@@ -16,6 +16,10 @@ public/*.png
 # Temp files
 .tmp-video/
 
+# WhatsApp session
+.wwebjs_auth/
+.wwebjs_cache/
+
 # Environment / secrets
 .env
 .env.*

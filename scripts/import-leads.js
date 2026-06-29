@@ -20,6 +20,26 @@ const NOT_REAL_WEBSITE_DOMAINS = [
   'ueniweb.com',
 ];
 
+function normalizePhone(phone) {
+  if (!phone) return null;
+  const digits = phone.replace(/\D/g, '');
+
+  if (phone.trimStart().startsWith('+52') || (digits.startsWith('52') && digits.length === 12)) {
+    return digits.length === 12 ? digits : null;
+  }
+  if (phone.trimStart().startsWith('+1') || (digits.startsWith('1') && digits.length === 11)) {
+    return digits.length === 11 ? digits : null;
+  }
+  // US format: (619) XXX-XXXX
+  if (phone.trimStart().startsWith('(') && digits.length === 10) {
+    return '1' + digits;
+  }
+  // bare 10 digits — assume Mexican
+  if (digits.length === 10) return '52' + digits;
+
+  return null;
+}
+
 function hasRealWebsite(url) {
   if (!url) return false;
   try {
@@ -39,9 +59,9 @@ if (!file) {
 const leads = JSON.parse(readFileSync(join(root, file), 'utf-8'));
 
 const insert = db.prepare(`
-  INSERT OR IGNORE INTO leads (title, phone, website, street, city, state, country_code,
+  INSERT OR IGNORE INTO leads (title, phone, phone_normalized, website, street, city, state, country_code,
     categories, category_name, total_score, reviews_count, google_maps_url, has_real_website)
-  VALUES (@title, @phone, @website, @street, @city, @state, @countryCode,
+  VALUES (@title, @phone, @phoneNormalized, @website, @street, @city, @state, @countryCode,
     @categories, @categoryName, @totalScore, @reviewsCount, @url, @hasRealWebsite)
 `);
 
@@ -53,6 +73,7 @@ const importAll = db.transaction((leads) => {
       categories: JSON.stringify(lead.categories || []),
       website: lead.website || null,
       phone: lead.phone || null,
+      phoneNormalized: normalizePhone(lead.phone),
       hasRealWebsite: hasRealWebsite(lead.website) ? 1 : 0,
     });
     if (result.changes > 0) imported++;
@@ -65,6 +86,7 @@ const imported = importAll(leads);
 // Update existing rows that weren't re-inserted
 const updateExisting = db.prepare('UPDATE leads SET has_real_website = @hasRealWebsite WHERE website = @website');
 const updateNull = db.prepare('UPDATE leads SET has_real_website = 0 WHERE website IS NULL');
+const updatePhone = db.prepare('UPDATE leads SET phone_normalized = ? WHERE id = ?');
 db.transaction(() => {
   updateNull.run();
   for (const lead of leads) {
@@ -74,6 +96,14 @@ db.transaction(() => {
         hasRealWebsite: hasRealWebsite(lead.website) ? 1 : 0,
       });
     }
+  }
+})();
+
+// Backfill phone_normalized for all rows that don't have it yet
+db.transaction(() => {
+  const rows = db.prepare('SELECT id, phone FROM leads WHERE phone_normalized IS NULL AND phone IS NOT NULL').all();
+  for (const row of rows) {
+    updatePhone.run(normalizePhone(row.phone), row.id);
   }
 })();
 

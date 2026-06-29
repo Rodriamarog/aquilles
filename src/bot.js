@@ -1,0 +1,147 @@
+import { createRequire } from 'module';
+import { readFileSync, unlinkSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+import db from './db.js';
+
+const require = createRequire(import.meta.url);
+const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
+const qrcode = require('qrcode-terminal');
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const root = join(__dirname, '..');
+
+// Config
+const conf = readFileSync(join(root, 'app.conf'), 'utf-8');
+const INITIAL_PITCH = conf.match(/INITIAL_PITCH\s*=\s*"([^"]+)"/)?.[1]?.trim();
+if (!INITIAL_PITCH) throw new Error('INITIAL_PITCH not found in app.conf');
+
+const OPENER = 'Buen dia';
+const VIDEO_TEASE = 'Los de diseño grafico les prepararon un pequeño video demostrativo';
+const DAILY_LIMIT = 5;
+const SEND_INTERVAL_MS = 24 * 60 * 60 * 1000;
+
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+async function typeAndSend(chatId, message) {
+  const chat = await client.getChatById(chatId);
+  await chat.sendStateTyping();
+  await sleep(2000 + message.length * 30);
+  await chat.clearState();
+  await client.sendMessage(chatId, message);
+}
+
+function toChatId(phoneNormalized) {
+  return phoneNormalized + '@c.us';
+}
+
+// Prepared statements
+const stmtInsertMsg = db.prepare(`INSERT INTO messages (lead_id, direction, body) VALUES (?, ?, ?)`);
+const stmtSetContacted = db.prepare(`UPDATE leads SET status = 'contacted', updated_at = datetime('now') WHERE id = ?`);
+const stmtSetPitched = db.prepare(`UPDATE leads SET status = 'pitched', video_path = NULL, updated_at = datetime('now') WHERE id = ?`);
+const stmtFindByChatId = db.prepare(`SELECT * FROM leads WHERE phone_normalized = ?`);
+
+function findLeadByChatId(chatId) {
+  return stmtFindByChatId.get(chatId.replace('@c.us', '')) || null;
+}
+
+async function sendDailyBatch(client) {
+  const leads = db.prepare(`
+    SELECT * FROM leads
+    WHERE status = 'pending' AND video_path IS NOT NULL
+      AND has_real_website = 0 AND phone IS NOT NULL
+    ORDER BY title ASC LIMIT ?
+  `).all(DAILY_LIMIT);
+
+  if (leads.length === 0) {
+    console.log('[bot] No pending leads with videos ready. Nothing sent today.');
+    return;
+  }
+
+  console.log(`[bot] Sending opener to ${leads.length} leads...`);
+  for (const lead of leads) {
+    try {
+      const numberId = await client.getNumberId(lead.phone_normalized);
+      if (!numberId) {
+        console.error(`  ✗ ${lead.title}: not on WhatsApp`);
+        continue;
+      }
+      const chatId = numberId._serialized;
+      await typeAndSend(chatId, OPENER);
+      stmtInsertMsg.run(lead.id, 'sent', OPENER);
+      stmtSetContacted.run(lead.id);
+      console.log(`  → ${lead.title} (${lead.phone})`);
+    } catch (err) {
+      console.error(`  ✗ ${lead.title}: ${err.message}`);
+    }
+  }
+}
+
+async function deliverPitch(client, lead) {
+  const chatId = toChatId(lead.phone_normalized);
+  console.log(`[bot] Pitching ${lead.title}...`);
+  try {
+    await sleep(10000);
+
+    await typeAndSend(chatId, INITIAL_PITCH);
+    stmtInsertMsg.run(lead.id, 'sent', INITIAL_PITCH);
+
+    await sleep(5000);
+
+    await typeAndSend(chatId, VIDEO_TEASE);
+    stmtInsertMsg.run(lead.id, 'sent', VIDEO_TEASE);
+
+    await sleep(5000);
+
+    const chat = await client.getChatById(chatId);
+    await chat.sendStateTyping();
+    await sleep(2000);
+    await chat.clearState();
+    const videoAbsPath = join(root, lead.video_path);
+    const media = MessageMedia.fromFilePath(videoAbsPath);
+    await client.sendMessage(chatId, media);
+    stmtInsertMsg.run(lead.id, 'sent', '[video]');
+
+    stmtSetPitched.run(lead.id);
+    try { unlinkSync(videoAbsPath); } catch {}
+    console.log(`  → Pitched and video deleted for ${lead.title}`);
+  } catch (err) {
+    console.error(`  ✗ Pitch failed for ${lead.title}: ${err.message}`);
+  }
+}
+
+// WhatsApp client
+const client = new Client({
+  authStrategy: new LocalAuth(),
+  puppeteer: { args: ['--no-sandbox'] },
+});
+
+client.on('qr', (qr) => {
+  qrcode.generate(qr, { small: true });
+  console.log('[bot] Scan the QR code above with WhatsApp');
+});
+
+client.on('ready', async () => {
+  console.log('[bot] Client is ready');
+  await sendDailyBatch(client);
+  setInterval(() => sendDailyBatch(client), SEND_INTERVAL_MS);
+});
+
+client.on('message', async (msg) => {
+  if (msg.fromMe) return;
+
+  const lead = findLeadByChatId(msg.from);
+  if (!lead) return;
+
+  stmtInsertMsg.run(lead.id, 'received', msg.body);
+  console.log(`[bot] Reply from ${lead.title}: "${msg.body}"`);
+
+  if (lead.status === 'contacted') {
+    await deliverPitch(client, lead);
+  }
+});
+
+client.on('auth_failure', (msg) => console.error('[bot] Auth failure:', msg));
+client.on('disconnected', (reason) => console.log('[bot] Disconnected:', reason));
+
+client.initialize();

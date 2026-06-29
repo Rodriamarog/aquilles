@@ -3,7 +3,7 @@ import { ShowcaseVideo } from "./ShowcaseVideo.jsx";
 
 export const RemotionRoot = () => {
   const fps = 30;
-  const durationInSeconds = 22;
+  const durationInSeconds = 14;
 
   return (
     <Composition

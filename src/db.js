@@ -28,7 +28,9 @@ db.exec(`
     warmth TEXT,
     notes TEXT,
     created_at TEXT NOT NULL DEFAULT (datetime('now')),
-    updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+    updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+    video_path TEXT,
+    phone_normalized TEXT
   );
 
   CREATE TABLE IF NOT EXISTS messages (
@@ -45,5 +47,9 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_leads_has_real_website ON leads(has_real_website);
   CREATE INDEX IF NOT EXISTS idx_messages_lead_id ON messages(lead_id);
 `);
+
+try { db.exec('ALTER TABLE leads ADD COLUMN video_path TEXT'); } catch {}
+try { db.exec('ALTER TABLE leads ADD COLUMN phone_normalized TEXT'); } catch {}
+try { db.exec('CREATE INDEX IF NOT EXISTS idx_leads_phone_normalized ON leads(phone_normalized)'); } catch {}
 
 export default db;
