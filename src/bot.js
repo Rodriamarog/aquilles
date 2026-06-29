@@ -147,6 +147,16 @@ client.on('ready', () => {
       sending = true;
       await sendDailyBatch(client);
       sending = false;
+    } else if (req.method === 'POST' && req.url === '/test') {
+      res.writeHead(200).end('Test message sending...\n');
+      try {
+        const numberId = await client.getNumberId('526633824933');
+        if (!numberId) { console.error('[test] Number not found on WhatsApp'); return; }
+        await typeAndSend(numberId._serialized, 'Buen dia (test)');
+        console.log('[test] Message sent to 526633824933');
+      } catch (err) {
+        console.error('[test] Failed:', err.message);
+      }
     } else {
       res.writeHead(404).end('Not found\n');
     }
