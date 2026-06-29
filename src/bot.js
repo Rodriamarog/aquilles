@@ -91,9 +91,11 @@ async function sendDailyBatch(client) {
 }
 
 async function deliverPitch(client, lead) {
-  const chatId = toChatId(lead.phone_normalized);
   console.log(`[bot] Pitching ${lead.title}...`);
   try {
+    const numberId = await client.getNumberId(lead.phone_normalized);
+    if (!numberId) { console.error(`  ✗ ${lead.title}: not on WhatsApp`); return; }
+    const chatId = numberId._serialized;
     await sleep(10000);
 
     await typeAndSend(chatId, INITIAL_PITCH);
